@@ -13,25 +13,6 @@ Use
 ---------------
 
 
-Code Coverage
-------------------
-Uses Jacoco via [Jacoco4sbt](https://github.com/sbt/jacoco4sbt/wiki)
-
-	> jacoco:check
-
-Read documentation details, specially if using integration tests.
-
-Style Checker
--------------------
-Uses ScalaStyle(http://www.scalastlye.org)
-
-	> scalastyle
-
-Source code statistics
----------------------
-
-	> sbt-stats
-
 Author
 --------------------
 
