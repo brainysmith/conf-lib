@@ -1,4 +1,4 @@
-Configuration library
+CONF-LIB
 ----------------------
 This project aims to simplify working with configuration.
 A configuration file's URL specified by the system property 'blitzConfUrl'
