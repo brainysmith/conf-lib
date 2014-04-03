@@ -13,9 +13,9 @@ test-app-conf {
     logger {
         dir-of-logs = ${test-app-conf.data-dir}"/logs"
         levels {
-     	    root = "INFO"
-            core = "DEBUG"
-            Wl = "TRACE"
+            com.blitz = "INFO"
+            com.blitz.scs = "DEBUG"
+            com.blitz.crypt = "TRACE"
         }
     }
     modules {
