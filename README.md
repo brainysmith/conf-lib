@@ -7,7 +7,7 @@ If the property no found or the URL is wrong throws IllegalStateException.
 
 Example of the configuration
 ----------------------------
-```
+```json
 test-app-conf {
     data-dir = "/opt/git/data"
     logger {
@@ -39,18 +39,13 @@ Requires
 Use
 ---------------
 * Scala
-```
+```scala
 class TestAppConf extends BlitzConf("test-app-conf") {
   implicit val self = this
-
   val logger = new NestedConf("logger")(this) {
-
     val dirOfLogs = getString("dir-of-logs")
-
     val levels = getMapString("levels")
-
   }
-
   val modules = getDeepMapString("modules")
   val flow = getOptString("flow")
 }
