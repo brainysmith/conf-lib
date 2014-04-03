@@ -1,25 +1,23 @@
 Configuration library
 ----------------------
 This project aims to simplify working with configuration.
+A configuration file's URL specified by the system property 'blitzConfUrl'
+For example: file:./src/test/resources/empty.conf.
+If the property no found or the URL is wrong throws IllegalStateException.
 
 Example of the configuration
 ----------------------------
 ```
-main-conf {
+test-app-conf {
     data-dir = "/opt/git/data"
-
     logger {
-        dir-of-logs = ${main-conf.data-dir}"/logs"
-
+        dir-of-logs = ${test-app-conf.data-dir}"/logs"
         levels {
      	    root = "INFO"
             core = "DEBUG"
             Wl = "TRACE"
         }
     }
-}
-
-test-conf {
     modules {
         module1 = {
             order = 1
@@ -40,6 +38,25 @@ Requires
 
 Use
 ---------------
+* Scala
+```
+class TestAppConf extends BlitzConf("test-app-conf") {
+  implicit val self = this
+
+  val logger = new NestedConf("logger")(this) {
+
+    val dirOfLogs = getString("dir-of-logs")
+
+    val levels = getMapString("levels")
+
+  }
+
+  val modules = getDeepMapString("modules")
+  val flow = getOptString("flow")
+}
+```
+* Java
+TODO
 
 Author
 --------------------

@@ -5,28 +5,37 @@ import org.scalatest._
 /**
  */
 
-class TestConf extends MainConf("test-conf") {
+class TestAppConf extends BlitzConf("test-app-conf") {
   implicit val self = this
 
+  val logger = new NestedConf("logger")(this) {
+
+    val dirOfLogs = getString("dir-of-logs")
+
+    val levels = getMapString("levels")
+
+  }  
+  
   val modules = getDeepMapString("modules")
   val flow = getOptString("flow")
 }
 
 trait ConfBehaviors extends Matchers { this: FlatSpec =>
 
-  def mainConf(conf: TestConf) {
+  def blitzConf(conf: TestAppConf) {
     it should "contains non empty dataDirPath (mandatory parameter)" in {
-      conf.main.dataDirPath should not be empty
-    }
-    it should "contains non empty logger.dirOfLogs (mandatory parameter)" in {
-      conf.main.logger.dirOfLogs should not be empty
-    }
-    it should "contains non empty logger.levels (map parameter)" in {
-      conf.main.logger.dirOfLogs should not be empty
+      conf.dataDirPath should not be empty
     }
   }
 
-  def testConf(conf: TestConf) {
+  def testConf(conf: TestAppConf) {
+    it should "contains non empty logger.dirOfLogs (mandatory parameter)" in {
+      conf.logger.dirOfLogs should not be empty
+    }
+    it should "contains non empty logger.levels (map parameter)" in {
+      conf.logger.dirOfLogs should not be empty
+    }    
+    
     it should "contains non empty modules map (deep map parameter)" in {
       conf.modules should not be empty
     }
@@ -36,35 +45,37 @@ trait ConfBehaviors extends Matchers { this: FlatSpec =>
   }
 }
 
-class MainConfTest extends FlatSpec with Matchers with ConfBehaviors {
+class BlitzConfTest extends FlatSpec with Matchers with ConfBehaviors {
+
+  behavior of "Negative cases"
 
   it should "throw IllegalStateException if a property 'blitzConfUrl' is undefined." in {
     System.clearProperty("blitzConfUrl")
     a [IllegalStateException] should be thrownBy {
-      new TestConf
+      new TestAppConf
     }
   }
 
   it should "throw IllegalStateException if an configuration not found" in {
     System.setProperty("blitzConfUrl", "file:./wrongPath")
     a [IllegalStateException] should be thrownBy {
-      new TestConf
+      new TestAppConf
     }
   }
 
   it should "throw IllegalStateException if an configuration is empty" in {
     System.setProperty("blitzConfUrl", "file:./src/test/resources/empty.conf")
     a [IllegalStateException] should be thrownBy {
-      new TestConf
+      new TestAppConf
     }
   }
 
-  lazy val testConf = {
+  lazy val testAppConf = {
     System.setProperty("blitzConfUrl", "file:./src/test/resources/test.conf")
-    new TestConf
+    new TestAppConf
   }
 
-  "A test.conf (main-conf part)" should behave like mainConf(testConf)
+  "A common blitz parameters" should behave like blitzConf(testAppConf)
 
-  "A test.conf (test-conf part)" should behave like testConf(testConf)
+  "An application specific parameters" should behave like testConf(testAppConf)
 }

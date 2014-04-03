@@ -37,7 +37,7 @@ class NestedConf(name: String, parentConf: Config) {
 
   @inline private[this] def _toMapString(cnf: Config): Map[String, String] = cnf.entrySet().asScala.map(_.getKey match {case key => key -> cnf.getString(key)}).toMap
 
-  def getMapString(name: String): Map[String, String] = getOptConfig(name).fold[Map[String, String]](Map.empty)(_toMapString _)
+  def getMapString(name: String): Map[String, String] = getOptConfig(name).fold[Map[String, String]](Map.empty)(_toMapString)
 
   def getDeepMapString(name: String): Map[String, Map[String, String]] = getOptConfig(name).fold[Map[String, Map[String, String]]](Map.empty){c => {
     c.entrySet().asScala.map(_.getKey.split('.')(0)).map{case key => key -> _toMapString(c.getConfig(key))}.toMap
@@ -45,24 +45,7 @@ class NestedConf(name: String, parentConf: Config) {
 
 }
 
-
-/**
- * Example:
- * main-conf {
- *
- *   data-dir = "/opt/git/data"
- *
- *   logger {
- *      dir-of-logs = ${main-conf.data-dir}"/logs"
- *      levels {
- *        com.blitz = "INFO"
- *        com.blitz.scs = "DEBUG"
- *        com.blitz.crypt = "TRACE"
- *      }
- *   }
- * }
- */
-class MainConf(private val appConf: String, private val root: Config = Option(System.getProperty("blitzConfUrl")).fold[Config](
+class BlitzConf(private val appConf: String, private val root: Config = Option(System.getProperty("blitzConfUrl")).fold[Config](
   throw new IllegalStateException("Property 'blitzConfUrl' is undefined.")
 )(path => {
   val conf = ConfigFactory.parseURL(new URL(path))
@@ -72,22 +55,5 @@ class MainConf(private val appConf: String, private val root: Config = Option(Sy
   conf.resolve()
 })) extends NestedConf(appConf, root) {
 
-  val main = new NestedConf("main-conf", root) {
-
-    val dataDirPath = getString("data-dir")
-
-    val logger = new NestedConf("logger")(this) {
-
-      val dirOfLogs = getString("dir-of-logs")
-
-      val levels = getMapString("levels")
-
-    }
-  }
-
-  private def lookupConfig(key: String) = root.hasPath(key) match {
-    case true => Option(root.getString(key))
-    case false => None
-  }
-
+  val dataDirPath = getOptString("data-dir")
 }
