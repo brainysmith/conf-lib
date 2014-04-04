@@ -1,4 +1,4 @@
-package com.blitz.conf
+package com.identityblitz.conf
 
 import org.scalatest._
 
