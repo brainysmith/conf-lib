@@ -5,11 +5,22 @@ name := "conf-lib"
 
 organization := "com.identityblitz"
 
-version := "1.0"
+version := "0.1.0"
+
+licenses := Seq("MIT License" -> url("http://www.opensource.org/licenses/mit-license.php"))
+
+homepage := Some(url("https://github.com/brainysmith/conf-lib"))
 
 scalaVersion := "2.10.3"
 
+//Disable adding a scala version to artifact
 crossPaths := false
+
+publishMavenStyle := true
+
+publishArtifact in Test := false
+
+resolvers += "Local Maven Repository" at Path.userHome.asFile.toURI.toURL + "/.m2/repository"
 
 libraryDependencies ++= Seq(
     "com.typesafe" % "config" % "1.2.0",
@@ -23,8 +34,6 @@ testOptions in Test += Tests.Argument(TestFrameworks.ScalaTest, "-l", "org.scala
 
 //Code Coverage section
 jacoco.settings
-
-//itJacoco.settings
 
 //Style Check section 
 org.scalastyle.sbt.ScalastylePlugin.Settings
