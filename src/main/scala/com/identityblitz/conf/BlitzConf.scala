@@ -45,15 +45,17 @@ class NestedConf(name: String, parentConf: Config) {
 
 }
 
-class BlitzConf(private val appConf: String, private val root: Config = Option(System.getProperty("blitzConfUrl")).fold[Config](
-  throw new IllegalStateException("Property 'blitzConfUrl' is undefined.")
-)(path => {
-  val conf = ConfigFactory.parseURL(new URL(path))
-  if (conf.isEmpty) {
-    throw new IllegalStateException(s"the specified config [$path] not found or it's empty")
-  }
-  conf.resolve()
-})) extends NestedConf(appConf, root) {
+class BlitzConf(private val appConf: String, private val root: Config) extends NestedConf(appConf, root) {
+
+  def this(confName: String) = this(confName, Option(System.getProperty("blitzConfUrl")).fold[Config](
+    throw new IllegalStateException("Property 'blitzConfUrl' is undefined.")
+  )(path => {
+    val conf = ConfigFactory.parseURL(new URL(path))
+    if (conf.isEmpty) {
+      throw new IllegalStateException(s"the specified config [$path] not found or it's empty")
+    }
+    conf.resolve()
+  }))
 
   val dataDirPath = getOptString("data-dir")
 }
