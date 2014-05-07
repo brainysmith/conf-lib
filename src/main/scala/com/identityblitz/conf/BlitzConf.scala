@@ -20,20 +20,20 @@ class NestedConf(name: String, parentConf: Config) {
     case false => None
   }
 
-  def getString(name: String) = conf.getString(name)
-  def getOptString(implicit name: String) = _safeUnwrap(_.getString(_))
+  def getString(name: String): String = conf.getString(name)
+  def getOptString(implicit name: String): Option[String] = _safeUnwrap(_.getString(_))
 
-  def getInt(name: String) = conf.getInt(name)
-  def getOptInt(implicit name: String) = _safeUnwrap(_.getInt(_))
+  def getInt(name: String): Int = conf.getInt(name)
+  def getOptInt(implicit name: String): Option[Int] = _safeUnwrap(_.getInt(_))
 
-  def getLong(name: String) = conf.getLong(name)
-  def getOptLong(implicit name: String) = _safeUnwrap(_.getLong(_))
+  def getLong(name: String): Long = conf.getLong(name)
+  def getOptLong(implicit name: String): Option[Long] = _safeUnwrap(_.getLong(_))
 
-  def getBoolean(name: String) = conf.getBoolean(name)
-  def getOptBoolean(implicit name: String) = _safeUnwrap(_.getBoolean(_))
+  def getBoolean(name: String): Boolean = conf.getBoolean(name)
+  def getOptBoolean(implicit name: String): Option[Boolean] = _safeUnwrap(_.getBoolean(_))
 
-  def getConfig(name: String) = conf.getConfig(name)
-  def getOptConfig(implicit name: String) = _safeUnwrap(_.getConfig(_))
+  def getConfig(name: String): Config = conf.getConfig(name)
+  def getOptConfig(implicit name: String): Option[Config] = _safeUnwrap(_.getConfig(_))
 
   @inline private[this] def _toMapString(cnf: Config): Map[String, String] = cnf.entrySet().asScala.map(_.getKey match {case key => key -> cnf.getString(key)}).toMap
 
