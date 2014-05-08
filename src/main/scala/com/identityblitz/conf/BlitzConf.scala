@@ -56,6 +56,4 @@ class BlitzConf(private val appConf: String, private val root: Config) extends N
     }
     conf.resolve()
   }))
-
-  val dataDirPath = getOptString("data-dir")
 }
