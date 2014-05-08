@@ -23,9 +23,6 @@ class TestAppConf extends BlitzConf("test-app-conf") {
 trait ConfBehaviors extends Matchers { this: FlatSpec =>
 
   def blitzConf(conf: TestAppConf) {
-    it should "contains non empty dataDirPath (mandatory parameter)" in {
-      conf.dataDirPath should not be empty
-    }
   }
 
   def testConf(conf: TestAppConf) {
@@ -34,7 +31,7 @@ trait ConfBehaviors extends Matchers { this: FlatSpec =>
     }
     it should "contains non empty logger.levels (map parameter)" in {
       conf.logger.dirOfLogs should not be empty
-    }    
+    }
     
     it should "contains non empty modules map (deep map parameter)" in {
       conf.modules should not be empty

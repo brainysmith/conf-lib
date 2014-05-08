@@ -8,12 +8,12 @@ import scala.collection.JavaConverters._
  *
  */
 
-class NestedConf(name: String, parentConf: Config) {
+class NestedConf(name: Option[String], parentConf: Config) {
 
   //It is not right, but necessary to glue this configuration to the play framework configuration
-  def conf = parentConf.getConfig(name)
+  def conf = name.fold(parentConf)(parentConf.getConfig)
 
-  def this(name: String)(nestedConf: NestedConf) = this(name, nestedConf.conf)
+  def this(name: String)(nestedConf: NestedConf) = this(Some(name), nestedConf.conf)
 
   @inline private[this] def _safeUnwrap[B](func:(Config, String) => B)(implicit name2: String): Option[B] = conf.hasPath(name2) match {
     case true => Option(func(conf, name2))
@@ -45,9 +45,18 @@ class NestedConf(name: String, parentConf: Config) {
 
 }
 
-class BlitzConf(private val appConf: String, private val root: Config) extends NestedConf(appConf, root) {
+import BlitzConf.rootConf
+class BlitzConf(private val appConf: Option[String], private val root: Config) extends NestedConf(appConf, root) {
 
-  def this(confName: String) = this(confName, Option(System.getProperty("blitzConfUrl")).fold[Config](
+  def this(confName: String) = this(Some(confName), rootConf)
+
+  def this() = this(None, rootConf)
+
+}
+
+private object BlitzConf {
+
+  @inline private def rootConf = Option(System.getProperty("blitzConfUrl")).fold[Config](
     throw new IllegalStateException("Property 'blitzConfUrl' is undefined.")
   )(path => {
     val conf = ConfigFactory.parseURL(new URL(path))
@@ -55,5 +64,6 @@ class BlitzConf(private val appConf: String, private val root: Config) extends N
       throw new IllegalStateException(s"the specified config [$path] not found or it's empty")
     }
     conf.resolve()
-  }))
+  })
+
 }
