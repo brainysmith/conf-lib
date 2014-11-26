@@ -1,6 +1,6 @@
 package com.identityblitz.conf
 
-import com.typesafe.config.{Config, ConfigFactory}
+import com.typesafe.config.{ConfigObject, Config, ConfigFactory}
 import java.net.URL
 import scala.collection.JavaConverters._
 
@@ -34,6 +34,8 @@ class NestedConf(name: Option[String], parentConf: Config) {
 
   def getConfig(name: String): Config = conf.getConfig(name)
   def getOptConfig(implicit name: String): Option[Config] = _safeUnwrap(_.getConfig(_))
+
+  def getObjectList(implicit name: String): Seq[ConfigObject] = conf.getObjectList(name).asScala.toSeq
 
   @inline private[this] def _toMapString(cnf: Config): Map[String, String] = cnf.entrySet().asScala.map(_.getKey match {case key => key -> cnf.getString(key)}).toMap
 
