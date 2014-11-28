@@ -1,6 +1,6 @@
 package com.identityblitz.conf
 
-import com.typesafe.config.{ConfigObject, Config, ConfigFactory}
+import com.typesafe.config.{ConfigMergeable, ConfigObject, Config, ConfigFactory}
 import java.net.URL
 import scala.collection.JavaConverters._
 
@@ -48,11 +48,13 @@ class NestedConf(name: Option[String], parentConf: Config) {
 }
 
 import BlitzConf.rootConf
-class BlitzConf(private val appConf: Option[String], private val root: Config) extends NestedConf(appConf, root) {
+class BlitzConf(private val appConf: Option[String], private val root: Config ) extends NestedConf(appConf, root) {
 
-  def this(confName: String) = this(Some(confName), rootConf)
+  def this(confName: String) = this(Some(confName), rootConf.resolve())
 
-  def this() = this(None, rootConf)
+  def this() = this(None, rootConf.resolve())
+
+  def this(default: ConfigMergeable) = this(None, rootConf.withFallback(default).resolve())
 
 }
 
@@ -65,7 +67,7 @@ private object BlitzConf {
     if (conf.isEmpty) {
       throw new IllegalStateException(s"the specified config [$path] not found or it's empty")
     }
-    conf.resolve()
+    conf
   })
 
 }
