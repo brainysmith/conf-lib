@@ -23,7 +23,7 @@ publishArtifact in Test := false
 resolvers += "Local Maven Repository" at Path.userHome.asFile.toURI.toURL + "/.m2/repository"
 
 libraryDependencies ++= Seq(
-    "com.typesafe" % "config" % "1.2.0",
+    "com.typesafe" % "config" % "1.2.1",
     "org.scalatest" % "scalatest_2.10" % "2.0.1-SNAP" % "test",
     "org.scalacheck" %% "scalacheck" % "1.11.2" % "test"
 )
