@@ -5,7 +5,7 @@ name := "conf-lib"
 
 organization := "com.identityblitz"
 
-version := "0.1.1"
+version := "0.1.1-SNAPSHOT"
 
 licenses := Seq("MIT License" -> url("http://www.opensource.org/licenses/mit-license.php"))
 
@@ -22,20 +22,16 @@ publishArtifact in Test := false
 
 resolvers += "Local Maven Repository" at Path.userHome.asFile.toURI.toURL + "/.m2/repository"
 
-val nexus = "http://build.reaxoft.loc/store/content/repositories/"
+val nexus = "http://build.reaxoft.loc/store/content/repositories"
 
 credentials += Credentials("Sonatype Nexus Repository Manager", "build.reaxoft.loc", "deployment", "oracle_1")
 
 publishTo <<= version { (v: String) =>
-  val nexus = "http://build.reaxoft.loc/store/content/repositories"
-  //val nexus = "https://oss.sonatype.org/"
   if (v.trim.endsWith("SNAPSHOT"))
     Some("snapshots" at nexus + "/blitz-dev")
   else
     Some("releases"  at nexus + "/blitz-dev")
 }
-
-
 
 libraryDependencies ++= Seq(
     "com.typesafe" % "config" % "1.2.1",
