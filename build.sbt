@@ -47,6 +47,6 @@ testOptions in Test += Tests.Argument(TestFrameworks.ScalaTest, "-l", "org.scala
 jacoco.settings
 
 //Style Check section 
-org.scalastyle.sbt.ScalastylePlugin.Settings
+//org.scalastyle.sbt.ScalastylePlugin.Settings
  
-org.scalastyle.sbt.PluginKeys.config <<= baseDirectory { _ / "src/main/config" / "scalastyle-config.xml" }
+//org.scalastyle.sbt.PluginKeys.config <<= baseDirectory { _ / "src/main/config" / "scalastyle-config.xml" }
