@@ -28,7 +28,7 @@ credentials += Credentials("Sonatype Nexus Repository Manager", "build.reaxoft.l
 
 publishTo <<= version { (v: String) =>
   if (v.trim.endsWith("SNAPSHOT"))
-    Some("snapshots" at nexus + "/blitz-dev")
+    Some("snapshots" at nexus + "/blitz-snapshots")
   else
     Some("releases"  at nexus + "/blitz-dev")
 }
