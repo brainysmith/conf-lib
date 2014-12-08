@@ -30,7 +30,7 @@ publishTo <<= version { (v: String) =>
   if (v.trim.endsWith("SNAPSHOT"))
     Some("snapshots" at nexus + "/blitz-snapshots")
   else
-    Some("releases"  at nexus + "/blitz-dev")
+    Some("releases"  at nexus + "/blitz-releases")
 }
 
 libraryDependencies ++= Seq(
