@@ -5,7 +5,7 @@ name := "conf-lib"
 
 organization := "com.identityblitz"
 
-version := "0.1.1-SNAPSHOT"
+version := "0.1.1"
 
 licenses := Seq("MIT License" -> url("http://www.opensource.org/licenses/mit-license.php"))
 
